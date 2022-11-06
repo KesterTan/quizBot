@@ -33,6 +33,7 @@ def onAppStart(app):
     app.finalQuestions = []
     app.currentQuestion = 0
     app.input = ['']
+    app.correct = 0
 #     app.testAnswer='''haha123
 # 098
 # [1,2]'''
@@ -66,7 +67,13 @@ def loadQuestions(app):
         app.finalQuestions = random.sample(suitableQuestions,app.numberOfQuestions)
     else:
         app.finalQuestions = random.shuffle(list(suitableQuestions))
-            
+
+def reset(app):
+    app.correct = 0
+    app.currentQuestion = 0
+    app.currentQuestionCorrect = 0
+    app.tries = 0
+
 def redrawAll(app):
     if app.welcome:
         drawWelcome(app)
@@ -245,7 +252,15 @@ def drawQuestions(app):
             drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
 
 def drawResults(app):
-    drawLabel('haha results do this',app.width//2,app.height//2)
+    drawLabel("Results:",app.width//2,app.height//3, size = 70,bold = True)
+    drawLabel(f"Well Done! You got {app.correct} out of {len(app.finalQuestions)}",app.width//2,app.height//2, size =50)
+    drawLabel('Replay with the same settings, or change your selections!',app.width//2,app.height*2//3,size=30)
+    drawRect(app.width//2-app.width//8,app.height*2//3+100,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
+    drawRect(app.width//2+app.width//8,app.height*2//3+100,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
+    drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+100,size = 30,bold = True)
+    drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+100,size = 30, bold = True)
+
+
     pass
 
 def checkInput(app):
@@ -363,6 +378,7 @@ def onMousePress(app,mouseX,mouseY):
                 app.currentQuestion+=1
                 app.input=['']
                 app.tries = 0
+                app.correct+=1
         elif 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==1:
             app.tries += 1
             app.input=['']
@@ -379,7 +395,20 @@ def onMousePress(app,mouseX,mouseY):
             checkInput(app)
         elif 50<=mouseX<=150 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
             app.input = ['']
+    elif app.results:
+        if app.width//2-app.width//8-75<=mouseX<=app.width//2-app.width//8+75 and app.height*2//3+100-75/2<=mouseY<=app.height*2//3+100+75/2:
+            app.result = False
+            loadQuestions(app)
+            reset(app)
+            app.questions = True
+            pass
+        elif app.width//2+app.width//8-75<=mouseX<=app.width//2+app.width//8+75 and app.height*2//3+100-75/2<=mouseY<=app.height*2//3+100+75/2:
+            app.topics = True
+            app.result = False
+            reset(app)
         
+
+        app.width//2-app.width//8,app.height*2//3+100
     print(app.selectedTopic)
 
 def onKeyPress(app,key):
