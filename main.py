@@ -1,6 +1,7 @@
 from cmu_cs3_graphics import *
 import json
 import random
+import math
 
 #path = 123_0_1
 
@@ -39,6 +40,12 @@ def onAppStart(app):
 # [1,2]'''
     app.currentQuestionCorrect = 0
     app.tries = 0
+    app.incorrectAnswers = []
+    app.stepsPerSecond = 1
+    app.timeBulbX = app.width//2
+    app.timePerCT = (app.timeBulbX - app.width//4)*360//(app.width//2) # 0 to 360
+    app.timeLeft = app.timePerCT
+    app.bulbClicked = False
 
 def loadQuestions(app):
     suitableQuestions = set()
@@ -73,6 +80,7 @@ def reset(app):
     app.currentQuestion = 0
     app.currentQuestionCorrect = 0
     app.tries = 0
+    app.incorrectAnswers = []
 
 def redrawAll(app):
     if app.welcome:
@@ -136,9 +144,9 @@ def drawTopics(app):
 
 
 def drawSettings(app):
-    drawLabel("Settings:",app.width//2,app.height//8, size = 50,bold = True)
-    drawLabel("Customize your study session!",app.width//2,app.height//5, size =20)
-    drawLabel("Difficulty",app.width//2,app.height//4+10,size = 30, bold = True)
+    drawLabel("Settings:",app.width//2,app.height//10-40, size = 50,bold = True)
+    drawLabel("Customize your study session!",app.width//2,app.height//8, size =20)
+    drawLabel("Difficulty",app.width//2,app.height//6,size = 30, bold = True)
     if app.difficulty==0:
         bonusCol = None
         normalCol = None
@@ -148,12 +156,12 @@ def drawSettings(app):
     elif app.difficulty==2:
         bonusCol = 'lightGreen'
         normalCol = None
-    drawRect(app.width//2-app.width//12,app.height//3,100,50,align = 'center',fill=normalCol,borderWidth = 2, border = 'black')
-    drawRect(app.width//2+app.width//12,app.height//3,100,50,align = 'center',fill=bonusCol,borderWidth = 2, border = 'black')
-    drawLabel('Normal',app.width//2-app.width//12,app.height//3,size=25)
-    drawLabel('Bonus',app.width//2+app.width//12,app.height//3,size=25)
+    drawRect(app.width//2-app.width//12,app.height//4,100,50,align = 'center',fill=normalCol,borderWidth = 2, border = 'black')
+    drawRect(app.width//2+app.width//12,app.height//4,100,50,align = 'center',fill=bonusCol,borderWidth = 2, border = 'black')
+    drawLabel('Normal',app.width//2-app.width//12,app.height//4,size=25)
+    drawLabel('Bonus',app.width//2+app.width//12,app.height//4,size=25)
     
-    drawLabel("Number of Questions",app.width//2,app.height//2-50,size = 30, bold = True)
+    drawLabel("Number of Questions",app.width//2,app.height//3,size = 30, bold = True)
     if app.numberOfQuestions == 0:
         fiveQ = None
         tenQ = None
@@ -179,16 +187,16 @@ def drawSettings(app):
         tenQ = None
         fifteenQ = None
         twentyQ = 'lightGreen'
-    drawRect(app.width//2-3*app.width//12,app.height//2+20,100,50,align = 'center',fill=fiveQ,borderWidth = 2, border = 'black')
-    drawRect(app.width//2-app.width//12,app.height//2+20,100,50,align = 'center',fill=tenQ,borderWidth = 2, border = 'black')
-    drawRect(app.width//2+app.width//12,app.height//2+20,100,50,align = 'center',fill=fifteenQ,borderWidth = 2, border = 'black')
-    drawRect(app.width//2+3*app.width//12,app.height//2+20,100,50,align = 'center',fill=twentyQ,borderWidth = 2, border = 'black')
-    drawLabel('1',app.width//2-3*app.width//12,app.height//2+20,size=25)
-    drawLabel('2',app.width//2-app.width//12,app.height//2+20,size=25)
-    drawLabel('3',app.width//2+app.width//12,app.height//2+20,size=25)
-    drawLabel('4',app.width//2+3*app.width//12,app.height//2+20,size=25)
+    drawRect(app.width//2-3*app.width//12,app.height//2-75,100,50,align = 'center',fill=fiveQ,borderWidth = 2, border = 'black')
+    drawRect(app.width//2-app.width//12,app.height//2-75,100,50,align = 'center',fill=tenQ,borderWidth = 2, border = 'black')
+    drawRect(app.width//2+app.width//12,app.height//2-75,100,50,align = 'center',fill=fifteenQ,borderWidth = 2, border = 'black')
+    drawRect(app.width//2+3*app.width//12,app.height//2-75,100,50,align = 'center',fill=twentyQ,borderWidth = 2, border = 'black')
+    drawLabel('1',app.width//2-3*app.width//12,app.height//2-75,size=25)
+    drawLabel('2',app.width//2-app.width//12,app.height//2-75,size=25)
+    drawLabel('3',app.width//2+app.width//12,app.height//2-75,size=25)
+    drawLabel('4',app.width//2+3*app.width//12,app.height//2-75,size=25)
 
-    drawLabel("Mode",app.width//2,2*app.height//3-30,size=30,bold =True)
+    drawLabel("Mode",app.width//2,app.height//2,size=30,bold =True)
     if app.questionMode == 0:
         examCol = None
         practiceCol = None
@@ -198,17 +206,28 @@ def drawSettings(app):
     elif app.questionMode == 2:
         examCol = None
         practiceCol = 'lightGreen'
-    drawLabel("Exam Mode: Timed & 1 Attempt per Question",app.width//2,2*app.height//3,size=20)
-    drawLabel("Practice Mode: Untimed & Unlimited Attempts",app.width//2,2*app.height//3+25,size=20)
-    drawRect(app.width//2-app.width//12,3*app.height//4+20,100,50,align='center',borderWidth=2,border='black',fill=examCol)
-    drawRect(app.width//2+app.width//12,3*app.height//4+20,100,50,align='center',borderWidth=2,border='black',fill=practiceCol)
-    drawLabel("Exam",app.width//2-app.width//12,3*app.height//4+20,size = 25)
-    drawLabel("Practice",app.width//2+app.width//12,3*app.height//4+20,size = 25)
+    drawLabel("Exam Mode: Timed & 1 Attempt per Question",app.width//2,app.height//2+30,size=20)
+    drawLabel("Practice Mode: Untimed & Unlimited Attempts",app.width//2,app.height//2+55,size=20)
+    drawRect(app.width//2-app.width//12,2*app.height//3-25,100,50,align='center',borderWidth=2,border='black',fill=examCol)
+    drawRect(app.width//2+app.width//12,2*app.height//3-25,100,50,align='center',borderWidth=2,border='black',fill=practiceCol)
+    drawLabel("Exam",app.width//2-app.width//12,2*app.height//3-25,size = 25)
+    drawLabel("Practice",app.width//2+app.width//12,2*app.height//3-25,size = 25)
+
+    if app.questionMode == 1:
+        drawLabel("Time Per CT",app.width//2,3*app.height//4,size = 30, bold = True)
+        drawLine(app.width//4,3*app.height//4+50,3*app.width//4,3*app.height//4+50,lineWidth = 10, fill = 'grey')
+        drawCircle(app.timeBulbX,app.height*3//4+50,20,fill='grey')
+        drawRect(app.width//2,app.height*4//5+80,125,50,align= 'center',fill = None, border = 'black', borderWidth = 2)
+        drawLabel(f'{app.timePerCT} seconds',app.width//2,app.height*4//5+80,size = 20)
+        
 
     drawRect(app.width-110,app.height-60,100,50,fill='yellow',border='black',borderWidth = 5)
     drawRect(app.width-220,app.height-60,100,50,fill='yellow',border='black',borderWidth = 5)
     drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True)
     drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True)
+
+    
+
 
 def drawQuestions(app):
     print(f"final: {app.finalQuestions}")
@@ -225,31 +244,43 @@ def drawQuestions(app):
         for lineIndex in range(len(app.input)):
             drawLabel(app.input[lineIndex],app.width//2-650/2,app.height*6//7-80+lineIndex*25,size = 20,align = 'left')
         drawRect(650,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
-        drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
+        if app.questionMode == 2:
+            drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
+        elif app.questionMode == 1:
+            drawLabel('Next',700,app.height*6//7+85,size= 25, bold = True)
         drawRect(50,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
         drawLabel('Clear',100,app.height*6//7+85,size= 25, bold = True)
-        if app.currentQuestionCorrect==2:
-            drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
-            drawLabel('Well Done!',app.width//2,app.height//2 - 30, size = 40, bold = True)
-            drawLabel('Your Answer Is Correct!',app.width//2,app.height//2+20, size = 30, bold = True)
-            drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-            drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
-        elif app.currentQuestionCorrect==1 and app.tries<3:
-            drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
-            drawLabel('Try Again!',app.width//2,app.height//2 - 30, size = 40, bold = True)
-            drawLabel(f'You have {3-app.tries} tries left',app.width//2,app.height//2+20, size = 30, bold = True)
-            drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-            drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
-        elif app.currentQuestionCorrect==1 and app.tries>=3:
-            drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
-            drawLabel('The Correct',app.width//2,app.height//2 - 100, size = 40, bold = True)
-            drawLabel('Answer Was:',app.width//2,app.height//2 - 50, size = 40, bold = True)
-            answerSplittedLine = app.questionBank[question]["answer"].splitlines()
-            #answerSplittedLine  = app.testAnswer.splitlines()
-            for i in range(len(answerSplittedLine)):
-                drawLabel(answerSplittedLine[i],app.width//4+30,app.height//2+25*i, align= 'left',size = 20)
-            drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-            drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+        
+        if app.questionMode == 2:
+            if app.currentQuestionCorrect==2:
+                drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
+                drawLabel('Well Done!',app.width//2,app.height//2 - 30, size = 40, bold = True)
+                drawLabel('Your Answer Is Correct!',app.width//2,app.height//2+20, size = 30, bold = True)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+            elif app.currentQuestionCorrect==1 and app.tries<3:
+                drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
+                drawLabel('Try Again!',app.width//2,app.height//2 - 30, size = 40, bold = True)
+                drawLabel(f'You have {3-app.tries} tries left',app.width//2,app.height//2+20, size = 30, bold = True)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+            elif app.currentQuestionCorrect==1 and app.tries>=3:
+                drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
+                drawLabel('The Correct',app.width//2,app.height//2 - 100, size = 40, bold = True)
+                drawLabel('Answer Was:',app.width//2,app.height//2 - 50, size = 40, bold = True)
+                answerSplittedLine = app.questionBank[question]["answer"].splitlines()
+                #answerSplittedLine  = app.testAnswer.splitlines()
+                for i in range(len(answerSplittedLine)):
+                    drawLabel(answerSplittedLine[i],app.width//4+30,app.height//2+25*i, align= 'left',size = 20)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+
+        elif app.questionMode == 1:
+            seconds = app.timeLeft%60
+            minutes = (app.timeLeft - seconds)//60
+            if len(str(seconds))<2:
+                seconds = '0'+str(seconds)
+            drawLabel(f'{minutes}:{seconds} left', app.width*4//5,app.height//8, size = 40, bold = True)
 
 def drawResults(app):
     drawLabel("Results:",app.width//2,app.height//3, size = 70,bold = True)
@@ -260,12 +291,12 @@ def drawResults(app):
     drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+100,size = 30,bold = True)
     drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+100,size = 30, bold = True)
 
+def distance(x1,y1,x2,y2):
+    return math.sqrt((x2-x1)**2+(y2-y1)**2)
 
-    pass
-
-def checkInput(app):
+def stripSpaces(input):
     strippedInput = ''
-    for line in app.input:
+    for line in input:
         for character in line:
             if character == ' ':
                 pass
@@ -273,18 +304,44 @@ def checkInput(app):
                 strippedInput+=character
         strippedInput+='\n'
     strippedInput = strippedInput.strip()
+    return strippedInput
+
+def checkInput(app):
+    strippedInput = stripSpaces(app.input)
+    strippedAnswer = stripSpaces(app.questionBank[app.finalQuestions[app.currentQuestion]]["answer"])
     print(app.questionBank[app.finalQuestions[app.currentQuestion]]["answer"])
     print("\n")
     print(f"stripped: {strippedInput}")
     #if strippedInput == app.testAnswer:
-    if strippedInput == app.questionBank[app.finalQuestions[app.currentQuestion]]["answer"]:
-        print('ANSWER IS THE SAME')
-        app.currentQuestionCorrect = 2
-    else:
-        app.currentQuestionCorrect = 1
-        print(strippedInput)
-        print('ANSWER IS WRONG')
-    
+    if app.questionMode == 2:
+        if strippedInput == strippedAnswer:
+            print('ANSWER IS THE SAME')
+            app.currentQuestionCorrect = 2
+        else:
+            app.currentQuestionCorrect = 1
+            print(strippedInput)
+            print('ANSWER IS WRONG')
+    elif app.questionMode == 1:
+        if strippedInput == strippedAnswer:
+            app.correct+=1
+        else:
+            app.incorrectAnswers.append((app.input,app.currentQuestion))
+
+def onStep(app):
+    if app.questions and app.questionMode == 1:
+        if app.timeLeft>0:
+            app.timeLeft-=1
+        elif app.timeLeft<=0:
+            checkInput(app)
+            if app.currentQuestion+1>=len(app.finalQuestions):
+                app.results = True
+                app.questions = False
+            else: 
+                app.currentQuestion+=1
+                app.input=['']
+                app.timeLeft = app.timePerCT
+
+
 
 def onMousePress(app,mouseX,mouseY):
     if app.welcome:
@@ -317,42 +374,42 @@ def onMousePress(app,mouseX,mouseY):
             app.topics = False
             app.settings = True
     elif app.settings:
-        if app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and app.height//3-25<=mouseY<=app.height//3+25:
+        if app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and app.height//4-25<=mouseY<=app.height//4+25:
             if app.difficulty != 1:
                 app.difficulty = 1
             else:
                 app.difficulty = 0
-        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and app.height//3-25<=mouseY<=app.height//3+25:
+        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and app.height//4-25<=mouseY<=app.height//4+25:
             if app.difficulty != 2:
                 app.difficulty = 2
             else:
                 app.difficulty = 0
-        elif app.width//2-3*app.width//12-50<=mouseX<=app.width//2-3*app.width//12+50 and app.height//2+20-25<=mouseY<=app.height//2+20+25:
+        elif app.width//2-3*app.width//12-50<=mouseX<=app.width//2-3*app.width//12+50 and app.height//2-75-25<=mouseY<=app.height//2-75+25:
             if app.numberOfQuestions != 1:
                 app.numberOfQuestions = 1
             else:
                 app.numberOfQuestions = 0
-        elif app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and app.height//2+20-25<=mouseY<=app.height//2+20+25:
+        elif app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and app.height//2-75-25<=mouseY<=app.height//2-75+25:
             if app.numberOfQuestions != 2:
                 app.numberOfQuestions = 2
             else:
                 app.numberOfQuestions = 0
-        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and app.height//2+20-25<=mouseY<=app.height//2+20+25:
+        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and app.height//2-75-25<=mouseY<=app.height//2-75+25:
             if app.numberOfQuestions != 3:
                 app.numberOfQuestions = 3
             else:
                 app.numberOfQuestions = 0
-        elif app.width//2+3*app.width//12-50<=mouseX<=app.width//2+3*app.width//12+50 and app.height//2+20-25<=mouseY<=app.height//2+20+25:
+        elif app.width//2+3*app.width//12-50<=mouseX<=app.width//2+3*app.width//12+50 and app.height//2-75-25<=mouseY<=app.height//2-75+25:
             if app.numberOfQuestions != 4:
                 app.numberOfQuestions = 4
             else:
                 app.numberOfQuestions = 0
-        elif app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and 3*app.height//4-5<=mouseY<=3*app.height//4+45:
+        elif app.width//2-app.width//12-50<=mouseX<=app.width//2-app.width//12+50 and 2*app.height//3-50<=mouseY<=2*app.height//3:
             if app.questionMode!=1:
                 app.questionMode = 1
             else:
                 app.questionMode = 0
-        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and 3*app.height//4-5<=mouseY<=3*app.height//4+45:
+        elif app.width//2+app.width//12-50<=mouseX<=app.width//2+app.width//12+50 and 2*app.height//3-50<=mouseY<=2*app.height//3:
             if app.questionMode!=2:
                 app.questionMode = 2
             else:
@@ -367,23 +424,17 @@ def onMousePress(app,mouseX,mouseY):
               app.difficulty!=0):
                     app.settings = False    
                     app.questions = True
+                    app.timeLeft = app.timePerCT
                     loadQuestions(app) 
+        elif app.questionMode==1 and distance(app.timeBulbX,app.height*3//4+50,mouseX,mouseY)<=20:
+            print('bulb is clickedd')
+            app.bulbClicked = True
+        
+
     elif app.questions:
-        if 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==2:
-            app.currentQuestionCorrect = 0
-            if app.currentQuestion+1>=len(app.finalQuestions):
-                app.results = True
-                app.questions = False
-            else: 
-                app.currentQuestion+=1
-                app.input=['']
-                app.tries = 0
-                app.correct+=1
-        elif 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==1:
-            app.tries += 1
-            app.input=['']
-            app.currentQuestionCorrect = 0
-            if app.tries>3:
+        if app.questionMode == 2:
+            if 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==2:
+                app.currentQuestionCorrect = 0
                 if app.currentQuestion+1>=len(app.finalQuestions):
                     app.results = True
                     app.questions = False
@@ -391,10 +442,34 @@ def onMousePress(app,mouseX,mouseY):
                     app.currentQuestion+=1
                     app.input=['']
                     app.tries = 0
-        elif 650<=mouseX<=750 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
-            checkInput(app)
-        elif 50<=mouseX<=150 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
-            app.input = ['']
+                    app.correct+=1
+            elif 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==1:
+                app.tries += 1
+                app.input=['']
+                app.currentQuestionCorrect = 0
+                if app.tries>3:
+                    if app.currentQuestion+1>=len(app.finalQuestions):
+                        app.results = True
+                        app.questions = False
+                    else: 
+                        app.currentQuestion+=1
+                        app.input=['']
+                        app.tries = 0
+            elif 650<=mouseX<=750 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
+                checkInput(app)
+            elif 50<=mouseX<=150 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
+                app.input = ['']
+        elif app.questionMode == 1:
+            if 650<=mouseX<=750 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
+                checkInput(app)
+                if app.currentQuestion+1>=len(app.finalQuestions):
+                    app.results = True
+                    app.questions = False
+                else: 
+                    app.currentQuestion+=1
+                    app.input=['']
+                    app.timeLeft = app.timePerCT
+
     elif app.results:
         if app.width//2-app.width//8-75<=mouseX<=app.width//2-app.width//8+75 and app.height*2//3+100-75/2<=mouseY<=app.height*2//3+100+75/2:
             app.result = False
@@ -406,10 +481,21 @@ def onMousePress(app,mouseX,mouseY):
             app.topics = True
             app.result = False
             reset(app)
-        
-
-        app.width//2-app.width//8,app.height*2//3+100
     print(app.selectedTopic)
+
+def onMouseDrag(app,mouseX,mouseY):
+    if app.questionMode == 1 and app.bulbClicked:
+        app.timePerCT = (app.timeBulbX - app.width//4)*360//(app.width//2)
+        if mouseX>=3*app.width//4:
+            app.timeBulbX = 3*app.width//4
+        elif mouseX<=app.width//4:
+            app.timeBulbX = app.width//4
+        else:
+            app.timeBulbX = mouseX
+
+def onMouseRelease(app,mouseX,mouseY):
+    if app.questionMode == 1 and app.bulbClicked:
+        app.bulbClicked = False
 
 def onKeyPress(app,key):
     if app.questions:
