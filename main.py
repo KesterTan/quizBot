@@ -27,7 +27,7 @@ def onAppStart(app):
     app.questions = False
     app.results = False
     app.review = False
-    app.topicList = {0:'Loops',1:'Strings',2:'Animations',3:'1D Lists and Tuples',4:'2D Lists',5:'Sets & Dictionaries',6:'Object Oriented Programming',7:'Recursion'}
+    app.topicList = {0:'Loops',1:'Strings',2:'Animations',3:'1D Lists and Tuples',4:'2D Lists',5:'Sets & Dictionaries',6:'Object Oriented Programming',7:'Recursion',8:'All'}
     app.selectedTopic = set()
     app.difficulty = 0
     app.numberOfQuestions = 0
@@ -135,7 +135,7 @@ def drawCredit(app):
 def drawTopics(app):
     drawLabel("Topics:",app.width//2,app.height//8, size = 50,bold = True)
     drawLabel("Select all the topics you want to study!",app.width//2,app.height//5, size =30)
-    for i in range(8):
+    for i in range(len(app.topicList)):
         drawRect(app.width//6,3*app.height//10+i*40,30,30,fill = None, border = 'black')
     for key in app.topicList:
         drawLabel(app.topicList[key],app.width//4,3*app.height//10+key*40+15,align = 'left',size =25)
@@ -434,9 +434,14 @@ def onMousePress(app,mouseX,mouseY):
             app.welcome = True
     elif app.topics:
         app.width-60,app.height-35,100,50
-        for i in range(8):
+        for i in range(len(app.topicList)):
             if app.width//6<=mouseX<=app.width//6+30 and 3*app.height//10+i*40<=mouseY<=3*app.height//10+i*40+30:
-                if i not in app.selectedTopic:
+                if i==len(app.topicList)-1 and i not in app.selectedTopic:
+                    for j in range(len(app.topicList)):
+                        app.selectedTopic.add(j)
+                elif i==len(app.topicList)-1 and i in app.selectedTopic:
+                    app.selectedTopic = set()
+                elif i not in app.selectedTopic:
                     app.selectedTopic.add(i)
                 else:
                     app.selectedTopic.remove(i)
