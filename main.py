@@ -84,6 +84,7 @@ def reset(app):
     app.tries = 0
     app.incorrectAnswers = []
     app.input = ['']
+    app.timeLeft = app.timePerCT
 
 def redrawAll(app):
     if app.welcome:
