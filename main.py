@@ -127,10 +127,10 @@ def drawAbout(app):
 
 def drawCredit(app):
     drawLabel("112 Study Buddy made at Hack 112",app.width//2,app.height//3,size = 40)
-    drawLabel("Made by:",app.width//2, app.height//2, size = 40)
-    drawLabel("Shermern Ang (shermera)",app.width//2,app.height//2+app.height//20, size = 30)
-    drawLabel("Kester Tan (kestert)",app.width//2,app.height//2+2*app.height//20,size = 30)
-    drawLabel("Joshua Tsang (jtsang2)",app.width//2,app.height//2+3*app.height//20,size =30)
+    drawLabel("Made by:",app.width//2, app.height//2-40, size = 40)
+    drawLabel("Shermern Ang (shermera)",app.width//2,app.height//2+app.height//20-40, size = 30)
+    drawLabel("Kester Tan (kestert)",app.width//2,app.height//2+2*app.height//20-40,size = 30)
+    drawLabel("Joshua Tsang (jtsang2)",app.width//2,app.height//2+3*app.height//20-40,size =30)
     drawLabel("Nita Chen (kthavees)",app.width//2,app.height//2+3*app.height//20,size =30)
     drawRect(app.width//2,app.height//2+5*app.height//20,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
     drawLabel("Back",app.width//2,app.height//2+5*app.height//20,size = 25, bold = True)
