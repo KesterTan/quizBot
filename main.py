@@ -245,8 +245,8 @@ def drawQuestions(app):
         drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
         for lineIndex in range(len(app.input)):
             drawLabel(app.input[lineIndex],app.width//2-650/2,app.height*6//7-80+lineIndex*25,size = 20,align = 'left')
-        drawLabel("<",app.width//2+300,app.height*6//7-80+(len(app.input)-1)*25,size = 20,align='left')
-        
+        drawLabel(">",app.width//2-675/2,app.height*6//7-80+(len(app.input)-1)*25,size = 20,align='left',fill="yellow", border="black")
+                
         drawRect(650,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
         if app.questionMode == 2:
             drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
@@ -595,10 +595,6 @@ def onMousePress(app,mouseX,mouseY):
                     app.currentQuestion+=1
             elif app.width//2-50<=mouseX<=app.width//2+50 and app.height*9//10-60<=mouseY<=app.height*9//10-10:
                 app.review = False
-
-
-
-
     print(app.selectedTopic)
 
 def onMouseDrag(app,mouseX,mouseY):

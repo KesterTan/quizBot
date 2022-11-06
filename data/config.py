@@ -11,7 +11,7 @@ import json
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 SPREADSHEET_ID_input = '1ThYANJ2x2FAcFM4htgc3C3mQ03mIEMvjjhVjEyQ-gzA'
-RANGE_NAME = 'A1:G15'
+RANGE_NAME = 'A1:G21'
 
 def main():
     global values_input, service
@@ -68,16 +68,16 @@ for i in range(len(df)):
     difficulty = df['Difficulty'][i]
     origin = df["Origin"][i]
     answer = df['Answer'][i]
-    strippedInput = ''
-    for line in answer.splitlines():
-        for character in line:
-            if character == ' ':
-                pass
-            else:
-                strippedInput+=character
-        strippedInput+='\n'
-    answer = strippedInput.strip()
-    print(url)
+    # strippedInput = ''
+    # for line in answer.splitlines():
+    #     for character in line:
+    #         if character == ' ':
+    #             pass
+    #         else:
+    #             strippedInput+=character
+    #     strippedInput+='\n'
+    # answer = strippedInput.strip()
+    
     # img_data = requests.get(url).content
     # with open(file_name,'wb') as f:
     #         # shutil.copyfileobj(res.raw, f)
