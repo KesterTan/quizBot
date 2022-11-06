@@ -32,6 +32,7 @@ def onAppStart(app):
     app.finalQuestions = []
     app.currentQuestion = 0
     app.input = ['']
+    
 
 def loadQuestions(app):
     suitableQuestions = set()
@@ -166,10 +167,10 @@ def drawSettings(app):
 
 def drawQuestions(app):
     #question = app.finalQuestions[app.currentQuestion]
-    #imageWidth, imageHeight = getImageSize(question)
-    #questionLink ='https://drive.google.com/file/d/1Rz4rOsO2-nO9yfjzovQXYtXWJxSyvoo5/view?usp=sharing'
-
-    #drawImage(questionLink, 325, 200, align='center',width=400, height=300)
+    
+    questionLink ='https://drive.google.com/file/d/1Rz4rOsO2-nO9yfjzovQXYtXWJxSyvoo5/view?usp=sharing'
+    #imageWidth, imageHeight = getImageSize(questionLink)
+    drawImage(questionLink, app.width//2, 200, align='center',width=300, height=200)
 
     drawRect(app.width//2,app.height*6//7,700,220,align='center',fill=None,border = 'black', borderWidth = 5)
     drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
