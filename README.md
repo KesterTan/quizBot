@@ -22,4 +22,7 @@ Question difficulty levels can be selected by users
 Topics:
 Users can select question topics they want to practice
 
-
+To Run App:
+1) Download CMU Graphics, cmu_cs3_graphics.py
+2) To update data: python3 data/config.py
+3) To run app: python3 main.py

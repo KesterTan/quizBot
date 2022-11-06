@@ -1,3 +1,7 @@
 credentials.json
 /cmu_graphics
 /_pycache_
+cmu_112_graphics.py
+cmu_cs3_graphics.py
+/data/token.pickle
+token.json
