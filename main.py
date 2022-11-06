@@ -149,7 +149,7 @@ def drawTopics(app):
 
 def drawSettings(app):
     drawLabel("Settings:",app.width//2,app.height//10-40, size = 50,bold = True)
-    drawLabel("Customize your study session!",app.width//2,app.height//8, size =20)
+    drawLabel("Customize your study session!",app.width//2,app.height//8-20, size =20)
     drawLabel("Difficulty",app.width//2,app.height//6,size = 30, bold = True)
     if app.difficulty==0:
         bonusCol = None
@@ -247,6 +247,8 @@ def drawQuestions(app):
         drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
         for lineIndex in range(len(app.input)):
             drawLabel(app.input[lineIndex],app.width//2-650/2,app.height*6//7-80+lineIndex*25,size = 20,align = 'left')
+        drawLabel("<",app.width//2+300,app.height*6//7-80+(len(app.input)-1)*25,size = 20,align='left')
+        
         drawRect(650,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
         if app.questionMode == 2:
             drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
