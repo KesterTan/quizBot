@@ -8,13 +8,12 @@ def onAppStart(app):
     f=open('data/data.json')
     app.questionBank = dict()
     jsonData = json.load(f)
-    
+
     # for question in jsonData["data"]:
     #     app.questionBank[question["question"]] = {"topic":question["topic"],"difficulty":question["difficulty"],"answer":question["answer"],"origin":question["origin"]}
     # #dict (key:value) = id:(question,answer,topic,difficulty,origin)
     
     app.questionBank = jsonData["data"]
-
 
     print(app.questionBank)
     print(app.width)
@@ -36,15 +35,27 @@ def onAppStart(app):
 def loadQuestions(app):
     suitableQuestions = set()
     for question in app.questionBank:
-        if app.questionBank[question]["topic"] in app.selectedTopic and app.questionBank[question]["difficulty"]==app.difficulty:
+        # print(app.questionBank[question]["topic"])
+        # print(app.selectedTopic)
+        
+        # print("-----")
+        # print(app.questionBank[question]["difficulty"])
+        # print(app.difficulty)
+        
+        # print("-----")
+        # print("topic")
+        # print((int(app.questionBank[question]["topic"])) in app.selectedTopic)
+        
+        # print("difficulty")
+        if int(app.questionBank[question]["topic"]) in app.selectedTopic and int(app.questionBank[question]["difficulty"])+1==int(app.difficulty):
+            # print(f"adding: {question}")
             suitableQuestions.add(question)
-
+            
     if app.numberOfQuestions<len(suitableQuestions):
         app.finalQuestions = random.sample(suitableQuestions,app.numberOfQuestions)
     else:
         app.finalQuestions = random.shuffle(list(suitableQuestions))
-    print(app.finalQuestions)
-
+    
 def redrawAll(app):
     if app.welcome:
         drawWelcome(app)
@@ -165,11 +176,12 @@ def drawSettings(app):
     drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True)
 
 def drawQuestions(app):
-    #question = app.finalQuestions[app.currentQuestion]
-    #imageWidth, imageHeight = getImageSize(question)
-    #questionLink ='https://drive.google.com/file/d/1Rz4rOsO2-nO9yfjzovQXYtXWJxSyvoo5/view?usp=sharing'
+    print(f"final: {app.finalQuestions}")
+    question = app.finalQuestions[app.currentQuestion]
+    print(f"question: {question}")
+    # imageWidth, imageHeight = getImageSize(question)
 
-    #drawImage(questionLink, 325, 200, align='center',width=400, height=300)
+    drawImage(question, 325, 200, align='center',width=400, height=300)
 
     drawRect(app.width//2,app.height*6//7,700,220,align='center',fill=None,border = 'black', borderWidth = 5)
     drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
