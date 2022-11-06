@@ -131,6 +131,7 @@ def drawCredit(app):
     drawLabel("Shermern Ang (shermera)",app.width//2,app.height//2+app.height//20, size = 30)
     drawLabel("Kester Tan (kestert)",app.width//2,app.height//2+2*app.height//20,size = 30)
     drawLabel("Joshua Tsang (jtsang2)",app.width//2,app.height//2+3*app.height//20,size =30)
+    drawLabel("Nita Chen (kthavees)",app.width//2,app.height//2+3*app.height//20,size =30)
     drawRect(app.width//2,app.height//2+5*app.height//20,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
     drawLabel("Back",app.width//2,app.height//2+5*app.height//20,size = 25, bold = True)
 
