@@ -11,7 +11,7 @@ import json
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 SPREADSHEET_ID_input = '1ThYANJ2x2FAcFM4htgc3C3mQ03mIEMvjjhVjEyQ-gzA'
-RANGE_NAME = 'A1:G21'
+RANGE_NAME = 'A1:G12'
 
 def main():
     global values_input, service
@@ -59,7 +59,7 @@ big_dict = {}
 
 # Getting images from link
 for i in range(len(df)):
-    question = df['Question'][i]
+    question = df['Download'][i]
     url = df["Download"][i]
     id = df['ID'][i]
     file_name = "../images/" + id + '.png'
@@ -83,16 +83,16 @@ for i in range(len(df)):
     #         # shutil.copyfileobj(res.raw, f)
     #         f.write(img_data)
     #         print('Image sucessfully Downloaded: ',file_name)    
-            
-    res = requests.get(url, stream = True)
-    if res.status_code == 200:
-        with open(file_name,'wb') as f:
-            shutil.copyfileobj(res.raw, f)
-            # f.write(img_data)
-            print('Image sucessfully Downloaded: ',file_name)
-    else:
-        print(res.status_code)
-        print('Image Couldn\'t be retrieved')
+    # print(url)
+    # res = requests.get(url, stream = True)
+    # if res.status_code == 200:
+    #     with open(file_name,'wb') as f:
+    #         shutil.copyfileobj(res.raw, f)
+    #         # f.write(img_data)
+    #         print('Image sucessfully Downloaded: ',file_name)
+    # else:
+    #     print(res.status_code)
+    #     print('Image Couldn\'t be retrieved')
         
     id = Question(answer, topic, difficulty, origin)
     # jsonString = json.dumps(id.__dict__)

@@ -213,7 +213,7 @@ def drawSettings(app):
         examCol = None
         practiceCol = 'lightGreen'
     drawLabel("Exam Mode: Timed & 1 Attempt per Question",app.width//2,app.height//2+30,size=20)
-    drawLabel("Practice Mode: Untimed & Unlimited Attempts",app.width//2,app.height//2+55,size=20)
+    drawLabel("Practice Mode: Untimed & 4 Attempts Per Question",app.width//2,app.height//2+55,size=20)
     drawRect(app.width//2-app.width//12,2*app.height//3-25,100,50,align='center',borderWidth=2,border='black',fill=examCol)
     drawRect(app.width//2+app.width//12,2*app.height//3-25,100,50,align='center',borderWidth=2,border='black',fill=practiceCol)
     drawLabel("Exam",app.width//2-app.width//12,2*app.height//3-25,size = 25)
