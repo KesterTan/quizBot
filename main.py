@@ -107,12 +107,12 @@ def redrawAll(app):
 def drawWelcome(app):
     drawLabel("112 Study Buddy",app.width//2,app.height//4,bold = True, size = 60)
     #import 112 dragon or smth
-    drawRect(app.width//2,app.height//2-60,150,75,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
-    drawLabel("Study!",app.width//2,app.height//2-60,size = 30, bold = True)
-    drawRect(app.width//2,app.height//2+60,150,75,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
-    drawLabel("About",app.width//2,app.height//2+60,size = 30, bold = True)
-    drawRect(app.width//2,app.height//2+180,150,75,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
-    drawLabel("Credits",app.width//2,app.height//2+180,size = 30, bold = True)
+    drawRect(app.width//2,app.height//2-60,150,75,align = 'center', fill=rgb(59, 172, 215),borderWidth = 5)
+    drawLabel("Study!",app.width//2,app.height//2-60,size = 25, bold = True, fill="white")
+    drawRect(app.width//2,app.height//2+60,150,75,align = 'center', fill=rgb(59, 172, 215), borderWidth = 5)
+    drawLabel("About",app.width//2,app.height//2+60,size = 25, bold = True, fill="white")
+    drawRect(app.width//2,app.height//2+180,150,75,align = 'center', fill=rgb(59, 172, 215), borderWidth = 5)
+    drawLabel("Credits",app.width//2,app.height//2+180,size = 25, bold = True, fill="white")
 
 def drawAbout(app):
     drawLabel("Information:",app.width//2,app.height//3,size = 40)
@@ -122,7 +122,7 @@ def drawAbout(app):
     drawLabel("Users can choose between 2 modes, Practice, and Exam",app.width//2,app.height//2+2*app.height//16,size = 20)
     drawLabel("Difficulties: Question difficulty levels can be selected by users",app.width//2,app.height//2+3*app.height//16,size =20)
     drawLabel("Topics: Users can select question topics they want to practice",app.width//2,app.height//2+4*app.height//16,size =20)
-    drawRect(app.width//2,app.height//2+7*app.height//20,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
+    drawRect(app.width//2,app.height//2+7*app.height//20,100,50,align = 'center', fill=rgb(59, 172, 215),borderWidth = 5, border = 'black')
     drawLabel("Back",app.width//2,app.height//2+7*app.height//20,size = 25, bold = True)
 
 def drawCredit(app):
@@ -132,7 +132,7 @@ def drawCredit(app):
     drawLabel("Kester Tan (kestert)",app.width//2,app.height//2+2*app.height//20-40,size = 30)
     drawLabel("Joshua Tsang (jtsang2)",app.width//2,app.height//2+3*app.height//20-40,size =30)
     drawLabel("Nita Chen (kthavees)",app.width//2,app.height//2+3*app.height//20,size =30)
-    drawRect(app.width//2,app.height//2+5*app.height//20,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
+    drawRect(app.width//2,app.height//2+5*app.height//20,100,50,align = 'center', fill=rgb(59, 172, 215),borderWidth = 5, border = 'black')
     drawLabel("Back",app.width//2,app.height//2+5*app.height//20,size = 25, bold = True)
 
 def drawTopics(app):
@@ -146,8 +146,8 @@ def drawTopics(app):
     for checkIndex in app.selectedTopic:
         drawLine(app.width//6,3*app.height//10+checkIndex*40+10,app.width//6+15,3*app.height//10+checkIndex*40+30,fill= 'lightGreen',lineWidth = 5)
         drawLine(app.width//6+15,3*app.height//10+checkIndex*40+30,app.width//6+40,3*app.height//10+checkIndex*40-10,fill= 'lightGreen',lineWidth = 5)
-    drawRect(app.width-60,app.height-35,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
-    drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True)
+    drawRect(app.width-60,app.height-35,100,50,align = 'center', fill=rgb(59, 172, 215),borderWidth = 5)
+    drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True, fill="white")
 
 
 def drawSettings(app):
@@ -228,10 +228,10 @@ def drawSettings(app):
         drawLabel(f'{app.timePerCT} seconds',app.width//2,app.height*4//5+80,size = 20)
         
 
-    drawRect(app.width-110,app.height-60,100,50,fill='yellow',border='black',borderWidth = 5)
-    drawRect(app.width-220,app.height-60,100,50,fill='yellow',border='black',borderWidth = 5)
-    drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True)
-    drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True)
+    drawRect(app.width-110,app.height-60,100,50,fill=rgb(59, 172, 215),borderWidth = 5)
+    drawRect(app.width-220,app.height-60,100,50,fill=rgb(59, 172, 215),borderWidth = 5)
+    drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True, fill="white")
+    drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True, fill="white")
 
 def drawQuestions(app):
     print(f"final: {app.finalQuestions}")
@@ -247,29 +247,29 @@ def drawQuestions(app):
         drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
         for lineIndex in range(len(app.input)):
             drawLabel(app.input[lineIndex],app.width//2-650/2,app.height*6//7-80+lineIndex*25,size = 20,align = 'left')
-        drawLabel(">",app.width//2-675/2,app.height*6//7-80+(len(app.input)-1)*25,size = 20,align='left',fill="yellow", border="black")
+        drawLabel(">",app.width//2-675/2,app.height*6//7-80+(len(app.input)-1)*25,size = 20,align='left',fill=rgb(59, 172, 215), border="black")
                 
-        drawRect(650,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
+        drawRect(650,app.height*6//7+60,100,50,fill=rgb(59, 172, 215),border ='black',borderWidth=5)
         if app.questionMode == 2:
-            drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
+            drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True, fill="white")
         elif app.questionMode == 1:
-            drawLabel('Next',700,app.height*6//7+85,size= 25, bold = True)
-        drawRect(50,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
-        drawLabel('Clear',100,app.height*6//7+85,size= 25, bold = True)
+            drawLabel('Next',700,app.height*6//7+85,size= 25, bold = True, fill="white")
+        drawRect(50,app.height*6//7+60,100,50,fill=rgb(59, 172, 215),border ='black',borderWidth=5)
+        drawLabel('Clear',100,app.height*6//7+85,size= 25, bold = True, fill="white")
         
         if app.questionMode == 2:
             if app.currentQuestionCorrect==2:
                 drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
                 drawLabel('Well Done!',app.width//2,app.height//2 - 30, size = 40, bold = True)
                 drawLabel('Your Answer Is Correct!',app.width//2,app.height//2+20, size = 30, bold = True)
-                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill=rgb(59, 172, 215),border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True, fill="white")
             elif app.currentQuestionCorrect==1 and app.tries<3:
                 drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
                 drawLabel('Try Again!',app.width//2,app.height//2 - 30, size = 40, bold = True)
                 drawLabel(f'You have {3-app.tries} tries left',app.width//2,app.height//2+20, size = 30, bold = True)
-                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill=rgb(59, 172, 215),border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True, fill="white")
             elif app.currentQuestionCorrect==1 and app.tries>=3:
                 drawRect(app.width//4,app.height//4,app.width//2,app.height//2,fill='white',border = 'black', borderWidth = 5)
                 drawLabel('The Correct',app.width//2,app.height//2 - 100, size = 40, bold = True)
@@ -278,8 +278,8 @@ def drawQuestions(app):
                 #answerSplittedLine  = app.testAnswer.splitlines()
                 for i in range(len(answerSplittedLine)):
                     drawLabel(answerSplittedLine[i],app.width//4+30,app.height//2+25*i, align= 'left',size = 20)
-                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill='yellow',border = 'black',borderWidth = 5)
-                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True)
+                drawRect(3*app.width//4-100,3*app.height//4-50,100,50,fill=rgb(59, 172, 215),border = 'black',borderWidth = 5)
+                drawLabel('Next',3*app.width//4-50,3*app.height//4-25,size = 25, bold = True, fill="white")
 
         elif app.questionMode == 1:
             seconds = app.timeLeft%60
@@ -294,7 +294,7 @@ def drawQuestions(app):
         drawLabel('Please modify your settings',app.width//2,app.height//3+120,size = 25)
         drawLabel('by reducing number of questions or selecting more topics.',app.width//2,app.height//3+160,size = 25)
         drawLabel('We are sorry for the inconvenience. :(',app.width//2,app.height//3+200,size = 25)
-        drawRect(app.width//2,app.height//3+300,150,75,align='center',fill='yellow',border='black',borderWidth = 5)
+        drawRect(app.width//2,app.height//3+300,150,75,align='center',fill=rgb(59, 172, 215),border='black',borderWidth = 5)
         drawLabel('Back',app.width//2,app.height//3+300,size = 30, bold = True)
         
 
@@ -307,20 +307,20 @@ def drawResults(app):
         drawLabel(f"Practice some more!",app.width//2,app.height//2-40, size =50)
     if app.questionMode == 2:
         drawLabel('Replay with the same settings, or change your selections!',app.width//2,app.height*2//3,size=30)
-        drawRect(app.width//2-app.width//8,app.height*2//3+100,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
-        drawRect(app.width//2+app.width//8,app.height*2//3+100,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
-        drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+100,size = 30,bold = True)
-        drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+100,size = 30, bold = True)
+        drawRect(app.width//2-app.width//8,app.height*2//3+100,150,75,fill=rgb(59, 172, 215),borderWidth = 5,align = 'center')
+        drawRect(app.width//2+app.width//8,app.height*2//3+100,150,75,fill=rgb(59, 172, 215),borderWidth = 5,align = 'center')
+        drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+100,size = 25,bold = True, fill="white")
+        drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+100,size = 25, bold = True, fill="white")
     elif app.questionMode == 1:
         drawLabel("Check your answers!",app.width//2,app.height*2//3-75,size = 30)
-        drawRect(app.width//2,app.height*2//3,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
-        drawLabel("Review",app.width//2,app.height*2//3,size = 30,bold = True)
+        drawRect(app.width//2,app.height*2//3,150,75,fill=rgb(59, 172, 215),borderWidth = 5,align = 'center')
+        drawLabel("Review",app.width//2,app.height*2//3,size = 25,bold = True, fill="white")
 
         drawLabel('Replay with the same settings, or change your selections!',app.width//2,app.height*2//3+75,size=30)
-        drawRect(app.width//2-app.width//8,app.height*2//3+150,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
-        drawRect(app.width//2+app.width//8,app.height*2//3+150,150,75,fill='yellow',border='black',borderWidth = 5,align = 'center')
-        drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+150,size = 30,bold = True)
-        drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+150,size = 30, bold = True)
+        drawRect(app.width//2-app.width//8,app.height*2//3+150,150,75,fill=rgb(59, 172, 215),borderWidth = 5,align = 'center')
+        drawRect(app.width//2+app.width//8,app.height*2//3+150,150,75,fill=rgb(59, 172, 215),borderWidth = 5,align = 'center')
+        drawLabel("Replay",app.width//2-app.width//8,app.height*2//3+150,size = 25,bold = True, fill="white")
+        drawLabel("Settings",app.width//2+app.width//8,app.height*2//3+150,size = 25, bold = True, fill="white")
  
 def drawReview(app):
     print(app.incorrectAnswers)
@@ -360,12 +360,12 @@ def drawReview(app):
             drawLabel(answerSplittedLine[i],app.width//2+30,app.height*6//10+50+i*25, align= 'left',size = 20)
             drawLabel(answerSplittedLine[i],app.width//10+30,app.height*6//10+50+i*25, align= 'left',size = 20)
 
-    drawRect(app.width//10+10,app.height*9//10-60,100,50,fill = 'yellow',border = 'black', borderWidth = 5)
-    drawRect(9*app.width//10-110,app.height*9//10-60,100,50,fill = 'yellow',border = 'black', borderWidth = 5)
-    drawRect(app.width//2,app.height*9//10-35,100,50,fill = 'yellow',border = 'black', borderWidth = 5,align = 'center')
-    drawLabel("Back",app.width//10+60,app.height*9//10-35,size = 20, bold = True)
-    drawLabel("Next",app.width*9//10-60,app.height*9//10-35,size = 20, bold = True)
-    drawLabel("Close",app.width//2,app.height*9//10-35,size = 20, bold = True)
+    drawRect(app.width//10+10,app.height*9//10-60,100,50,fill = rgb(59, 172, 215), borderWidth = 5)
+    drawRect(9*app.width//10-110,app.height*9//10-60,100,50,fill = rgb(59, 172, 215), borderWidth = 5)
+    drawRect(app.width//2,app.height*9//10-35,100,50,fill = rgb(59, 172, 215), borderWidth = 5,align = 'center')
+    drawLabel("Back",app.width//10+60,app.height*9//10-35,size = 20, bold = True, fill="white")
+    drawLabel("Next",app.width*9//10-60,app.height*9//10-35,size = 20, bold = True, fill="white")
+    drawLabel("Close",app.width//2,app.height*9//10-35,size = 20, bold = True, fill="white")
 
 def distance(x1,y1,x2,y2):
     return math.sqrt((x2-x1)**2+(y2-y1)**2)

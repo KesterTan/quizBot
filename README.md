@@ -25,6 +25,6 @@ Users can select question topics they want to practice
 <h2><strong>To Run App:</strong></h2>
 <ol>
     <li>Download CMU Graphics, cmu_cs3_graphics.py</li>
-    <li>To update data: python3 data/config.py</li>
-    <li>To update data: python3 data/config.py</li>
+    <li><strong>To update data:<strong> run data/config.py (You don't have to do this, only run it when the sheet is updated</li>
+    <li><strong>To run app:</strong> run main.py</li>
 </ol>
