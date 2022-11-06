@@ -27,6 +27,7 @@ def onAppStart(app):
     app.questions = False
     app.results = False
     app.review = False
+    app.lackOfQuestions = False
     app.topicList = {0:'Loops',1:'Strings',2:'Animations',3:'1D Lists and Tuples',4:'2D Lists',5:'Sets & Dictionaries',6:'Object Oriented Programming',7:'Recursion',8:'All'}
     app.selectedTopic = set()
     app.difficulty = 0
@@ -230,9 +231,6 @@ def drawSettings(app):
     drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True)
     drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True)
 
-    
-
-
 def drawQuestions(app):
     print(f"final: {app.finalQuestions}")
     if app.finalQuestions!=None:
@@ -287,6 +285,16 @@ def drawQuestions(app):
             if len(str(seconds))<2:
                 seconds = '0'+str(seconds)
             drawLabel(f'{minutes}:{seconds} left', app.width*4//5,app.height//8, size = 40, bold = True)
+    elif app.finalQuestions == None:
+        drawLabel('Erorr',app.width//2,app.height//4,size = 40, bold = True)
+        drawLabel('We currently do not have sufficient questions',app.width//2,app.height//3,size = 25)
+        drawLabel('in our question bank that match your needs ',app.width//2,app.height//3+40,size = 25)
+        drawLabel('Please modify your settings',app.width//2,app.height//3+120,size = 25)
+        drawLabel('by reducing number of questions or selecting more topics.',app.width//2,app.height//3+160,size = 25)
+        drawLabel('We are sorry for the inconvenience. :(',app.width//2,app.height//3+200,size = 25)
+        drawRect(app.width//2,app.height//3+300,150,75,align='center',fill='yellow',border='black',borderWidth = 5)
+        drawLabel('Back',app.width//2,app.height//3+300,size = 30, bold = True)
+        
 
 def drawResults(app):
     drawLabel("Results:",app.width//2,app.height//3-100, size = 70,bold = True)
@@ -508,7 +516,11 @@ def onMousePress(app,mouseX,mouseY):
             app.bulbClicked = True
         
     elif app.questions:
-        if app.questionMode == 2:
+        if app.finalQuestions == None:
+            if app.width//2-75<=mouseX<=app.width//2+75 and app.height//3+300-75/2<=mouseY<=app.height//3+300+75/2:
+                app.questions = False
+                app.topics = True      
+        elif app.questionMode == 2:
             if 3*app.width//4-100<=mouseX<=3*app.width//4 and 3*app.height//4-50<=mouseY<=3*app.height//4 and app.currentQuestionCorrect==2:
                 app.currentQuestionCorrect = 0
                 if app.currentQuestion+1>=len(app.finalQuestions):
@@ -545,6 +557,7 @@ def onMousePress(app,mouseX,mouseY):
                     app.currentQuestion+=1
                     app.input=['']
                     app.timeLeft = app.timePerCT
+        
 
     elif app.results:
         if app.questionMode == 2:
