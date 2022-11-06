@@ -15,6 +15,7 @@ def onAppStart(app):
     
     app.questionBank = jsonData["data"]
 
+
     print(app.questionBank)
     print(app.width)
     print(app.height)
@@ -30,17 +31,19 @@ def onAppStart(app):
     app.questionMode = 0
     app.finalQuestions = []
     app.currentQuestion = 0
+    app.input = ['']
 
 def loadQuestions(app):
     suitableQuestions = set()
     for question in app.questionBank:
-        if question["topic"] in app.selectedTopics and question["difficulty"]==app.difficulty:
+        if app.questionBank[question]["topic"] in app.selectedTopic and app.questionBank[question]["difficulty"]==app.difficulty:
             suitableQuestions.add(question)
 
     if app.numberOfQuestions<len(suitableQuestions):
         app.finalQuestions = random.sample(suitableQuestions,app.numberOfQuestions)
     else:
         app.finalQuestions = random.shuffle(list(suitableQuestions))
+    print(app.finalQuestions)
 
 def redrawAll(app):
     if app.welcome:
@@ -84,6 +87,7 @@ def drawTopics(app):
         drawLine(app.width//6+15,3*app.height//10+checkIndex*40+30,app.width//6+40,3*app.height//10+checkIndex*40-10,fill= 'lightGreen',lineWidth = 5)
     drawRect(app.width-60,app.height-35,100,50,align = 'center', fill='yellow',borderWidth = 5, border = 'black')
     drawLabel("Next",app.width-60,app.height-35,size = 25, bold = True)
+
 
 def drawSettings(app):
     drawLabel("Settings:",app.width//2,app.height//8, size = 50,bold = True)
@@ -161,12 +165,23 @@ def drawSettings(app):
     drawLabel("Back",app.width-170,app.height-35,size = 25, bold = True)
 
 def drawQuestions(app):
-    question = app.finalQuestions[app.currentQuestion]
-    imageWidth, imageHeight = getImageSize(question)
-    questionLink ='https://drive.google.com/file/d/1Rz4rOsO2-nO9yfjzovQXYtXWJxSyvoo5/view?usp=sharing'
+    #question = app.finalQuestions[app.currentQuestion]
+    #imageWidth, imageHeight = getImageSize(question)
+    #questionLink ='https://drive.google.com/file/d/1Rz4rOsO2-nO9yfjzovQXYtXWJxSyvoo5/view?usp=sharing'
 
-    drawImage(questionLink, 325, 200, align='center',
-              width=imageWidth//2, height=imageHeight//2)
+    #drawImage(questionLink, 325, 200, align='center',width=400, height=300)
+
+    drawRect(app.width//2,app.height*6//7,700,220,align='center',fill=None,border = 'black', borderWidth = 5)
+    drawLabel("Type your answer here:",app.width//2-675/2,app.height*6//7-130,size = 30, bold = True,align='left')
+    for lineIndex in range(len(app.input)):
+        drawLabel(app.input[lineIndex],app.width//2-650/2,app.height*6//7-80+lineIndex*25,size = 20,align = 'left')
+    drawRect(650,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
+    drawLabel('Enter',700,app.height*6//7+85,size= 25, bold = True)
+    drawRect(50,app.height*6//7+60,100,50,fill='yellow',border ='black',borderWidth=5)
+    drawLabel('Clear',100,app.height*6//7+85,size= 25, bold = True)
+
+def checkInput(app):
+    pass
 
 def onMousePress(app,mouseX,mouseY):
     if app.welcome:
@@ -243,10 +258,34 @@ def onMousePress(app,mouseX,mouseY):
                     app.settings = False    
                     app.questions = True
                     loadQuestions(app) 
-
+    elif app.questions:
+        if 650<=mouseX<=750 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
+            checkInput(app)
+        elif 50<=mouseX<=150 and app.height*6//7+60<=mouseY<=app.height*6//7+110:
+            app.input = ['']
     print(app.selectedTopic)
 
 def onKeyPress(app,key):
+    if app.questions:
+        if key == 'enter':
+            app.input.append('')
+        elif key == 'tab':
+            pass
+        elif key == 'backspace' or key == 'delete':
+            if app.input!=[]:
+                if app.input[-1]=='':
+                    app.input.pop()
+                else:
+                    app.input[-1]=app.input[-1][:-1]
+        elif key == 'space':
+            app.input[-1]+=' '
+        elif key.isdigit():
+            app.input[-1]+=str(key)
+        elif key.isalpha():
+            app.input[-1]+=str(key)
+        else:
+            app.input[-1]+=str(key)
+        
     print(key)
 
 def main():
