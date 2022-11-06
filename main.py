@@ -166,7 +166,7 @@ def drawSettings(app):
     drawRect(app.width//2-app.width//12,app.height//4,100,50,align = 'center',fill=normalCol,borderWidth = 2, border = 'black')
     drawRect(app.width//2+app.width//12,app.height//4,100,50,align = 'center',fill=bonusCol,borderWidth = 2, border = 'black')
     drawLabel('Normal',app.width//2-app.width//12,app.height//4,size=25)
-    drawLabel('Bonus',app.width//2+app.width//12,app.height//4,size=25)
+    drawLabel('Hard',app.width//2+app.width//12,app.height//4,size=25)
     
     drawLabel("Number of Questions",app.width//2,app.height//3,size = 30, bold = True)
     if app.numberOfQuestions == 0:
